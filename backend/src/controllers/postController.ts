@@ -1,45 +1,58 @@
-import { Request, Response } from "express";
-import postService from "../services/postService";
-import { uploadMultiple } from "../middlewares/upload/uploadMultiple";
-import { Comment } from "../models/commentModel";
-export const getAllPosts = async (req: Request, res: Response) => {
-  try {
-    const posts = await postService.getAllPosts();
-    res.status(200).json(posts);
-  } catch (error) {
-    res.status(500).json({ message: "server Error " });
-  }
+import { NextFunction, Request, Response } from "express";
+import {
+  createOne,
+  deleteOne,
+  getAll,
+  getOne,
+  updateOne,
+} from "../services/handlersFactory";
+import { Post } from "../models/postModel";
+
+// midelwares =>
+export const setPostIdToBody = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
+  if (!req.body.postId) req.body.postId = req.params.id;
+  next();
 };
-export const getAllPostsByUserId = async (req: Request, res: Response) => {
-  try {
-    const { userId } = req.params;
-    const posts = await postService.getAllPostsByUserId(userId);
-    res.status(200).json(posts);
-  } catch (error) {
-    res.status(500).json({ message: "server Error" });
-  }
+
+// @desc : midelware to set user params to body
+// @route : Post users/:id/posts/
+// @access : private
+export const setUserParamToBody = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
+  if (!req?.body?.userId) req.body.userId = req.params.userId;
+  next();
 };
-export const addNewPost = async (req: Request, res: Response) => {
-  try {
-    const newPost = req.body;
-    const images = await uploadMultiple(req, res);
-    newPost.imgs = images;
-    delete newPost["folder"];
-    const post = await postService.insertPost(newPost);
-    res.status(200).json(post);
-  } catch (error) {
-    res.status(500).json({ message: "server Error Anas" });
-  }
-};
-export const removePost = async (req: Request, res: Response) => {
-  try {
-    const { postId } = req.params;
-    const removedPost = await postService.removePost(postId);
-    await Comment.deleteMany({
-      postId: removedPost?._id,
-    }).populate("comments");
-    res.status(200).json(removedPost);
-  } catch (error) {
-    res.status(500).json("serverError");
-  }
-};
+
+// routes =>
+
+// @desc : get all posts
+// @route : Get /posts
+// @access : public
+export const getAllPosts = getAll(Post);
+
+// @desc : get a post
+// @route : Get /posts/:id
+// @access : public
+export const getPost = getOne(Post);
+
+// @desc : create a post
+// @route : Post /posts
+// @access : private
+export const addNewPost = createOne(Post);
+
+// @desc : update a post
+// @route : Put /posts/:id
+// @access : private
+export const updatePost = updateOne(Post, "set");
+
+// @desc : delete a post
+// @route : Delete /posts/:id
+// @access : private
+export const deletePost = deleteOne(Post);

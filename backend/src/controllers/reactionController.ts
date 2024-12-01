@@ -1,77 +1,43 @@
-import { Request, Response } from "express";
-import reactionService from "../services/reactionService";
-import mongoose from "mongoose";
-import { TReactionType } from "../models/reactionModel";
-import { Post } from "../models/postModel";
-export const getAllReactions = async (req: Request, res: Response) => {
-  try {
-    const reactions = await reactionService.getAllReactions();
-    res.status(200).json(reactions);
-  } catch (error) {
-    res.status(500).json({ message: "Error server" });
-  }
-};
-export const getAllReactionsByPostId = async (req: Request, res: Response) => {
-  try {
-    const { postId } = req.body;
-    const reactionsByPostId = await reactionService.getAllReactionsByPostId(
-      postId
-    );
-    res.status(200).json(reactionsByPostId);
-  } catch (error) {
-    res.status(500).json({ message: "Error server" });
-  }
-};
-export const addReaction = async (req: Request, res: Response) => {
-  try {
-    const { userId, postId, reactionType } = req.body;
-    console.log(userId);
-    console.log(postId);
+import {
+  createOne,
+  deleteMany,
+  deleteOne,
+  getAll,
+  getOne,
+  updateOne,
+} from "../services/handlersFactory";
+import { Reaction } from "../models/reactionModel";
 
-    if (
-      !mongoose.Types.ObjectId.isValid(userId) ||
-      !mongoose.Types.ObjectId.isValid(postId)
-    ) {
-      return res.status(400).json({ error: "Invalid userId or postId" });
-    }
-    const newReaction = {
-      userId,
-      postId,
-      reactionType,
-    };
-    const reaction = await reactionService.insertReaction(newReaction);
-    await Post.findByIdAndUpdate(postId, {
-      $push: { reactions: reaction._id },
-    });
-    res.status(200).json(reaction);
-  } catch (error) {
-    res.status(500).json({ message: "server Error " });
-  }
-};
+// midelwares =>
 
-export const updateReaction = async (req: Request, res: Response) => {
-  try {
-    const { reactionId } = req.params;
-    const { reactionType } = req.body;
-    const updatedReaction = await reactionService.updateReaction(
-      reactionId,
-      reactionType
-    );
-    res.status(200).json(updatedReaction);
-  } catch (error) {
-    res.status(500).json("server Error ");
-  }
-};
+// @desc : it's midelware to remove reactions based on post Id
+// @route : Delete /posts/:id
+// @access : private
+export const deleteReactions = deleteMany(Reaction);
 
-export const removeReaction = async (req: Request, res: Response) => {
-  try {
-    const { reactionId } = req.params;
-    const removedReaction = await reactionService.removeReaction(reactionId);
-    await Post.findByIdAndUpdate(removedReaction?._id, {
-      $pull: { reactions: reactionId },
-    });
-    res.status(200).json(removedReaction);
-  } catch (error) {
-    res.status(500).json("server Error");
-  }
-};
+// routes =>
+
+// @desc : get All reactions
+// @route : Get /reactions/
+// @access : public
+export const getAllReactions = getAll(Reaction);
+
+// @desc : get one reaction
+// @route : Get /reactions/:id
+// @access : public
+export const getReaction = getOne(Reaction);
+
+// @desc : insert new reaction
+// @route : Post /reactions
+// @access : private
+export const addReaction = createOne(Reaction);
+
+// @desc : update a reaction
+// @route : Put /reactions
+// @access : private
+export const updateReaction = updateOne(Reaction, "set");
+
+// @desc : remove a comment
+// @route : Delete /comments
+// @access : private
+export const removeReaction = deleteOne(Reaction);

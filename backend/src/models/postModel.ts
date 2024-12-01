@@ -11,11 +11,11 @@ export interface IPost {
 
 const postSchema = new Schema<IPost>({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  text: { type: String, required: true },
-  isliked: { type: Boolean, required: true, default: false },
+  text: { type: String, required: false },
+  isliked: { type: Boolean, default: false },
   imgs: { type: [String], required: true },
-  reactions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reaction" }],
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+  // reactions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reaction" }],
+  // comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
 });
 
-export const Post = mongoose.model("Post", postSchema);
+export const Post = mongoose.model<IPost>("Post", postSchema);

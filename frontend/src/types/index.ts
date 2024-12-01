@@ -6,6 +6,7 @@ import { TReactionType } from "./reaction";
 import { TComment } from "./comment";
 import { TCommentRequest } from "./comment";
 import { TReactionRequest } from "./reaction";
+import { TPostIcons } from "./icons";
 export {
   type TUser,
   type TPost,
@@ -15,4 +16,5 @@ export {
   type TComment,
   type TCommentRequest,
   type TReactionRequest,
+  type TPostIcons,
 };

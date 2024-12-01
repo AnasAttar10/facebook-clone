@@ -8,6 +8,8 @@ const Watch = lazy(() => import("@pages/Watch"));
 const Marketplace = lazy(() => import("@pages/Marketplace"));
 const Groups = lazy(() => import("@pages/Groups"));
 const Gaming = lazy(() => import("@pages/Gaming"));
+const Login = lazy(() => import("@pages/Login"));
+const Register = lazy(() => import("@pages/Register"));
 
 const routes = createBrowserRouter([
   {
@@ -23,6 +25,8 @@ const routes = createBrowserRouter([
       { path: "marketplace", element: <Marketplace /> },
       { path: "groups", element: <Groups /> },
       { path: "gaming", element: <Gaming /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
     ],
   },
 ]);

@@ -8,4 +8,4 @@ const ImageSchema = new mongoose.Schema({
   imageUrls: [String], // Array of URLs
 });
 
-export const Comment = mongoose.model<IImage>("Comment", ImageSchema);
+export const Image = mongoose.model<IImage>("Image", ImageSchema);

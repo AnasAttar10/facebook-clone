@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Divider from "../components/Divider/Divider";
-import useRemoveComment from "@hooks/apis/useRemoveComment";
+import useRemoveComment from "@hooks/apis/comment/useRemoveComment";
 
 const Wrapper = styled.ul`
   list-style: none;
@@ -19,13 +19,8 @@ type TCommentPopup = {
   commentId: string;
   closeModal: () => void;
 };
-const CommentPopup = ({
-  userId,
-  postId,
-  commentId,
-  closeModal,
-}: TCommentPopup) => {
-  const { mutate } = useRemoveComment(userId, postId);
+const CommentPopup = ({ postId, commentId, closeModal }: TCommentPopup) => {
+  const { mutate } = useRemoveComment(postId);
   const handleDeteleComment = () => {
     mutate(commentId);
     closeModal();

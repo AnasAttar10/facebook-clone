@@ -10,12 +10,12 @@ type TListViewer<T> = {
 function ListViewer<T>({
   items,
   renderItem,
-  hEachPost,
   hScrollableArea,
+  hEachPost,
   $showScroll = true,
 }: TListViewer<T>) {
   const renderRow = ({ index }: { index: number }) => (
-    <div style={{ overflowY: "hidden" }}>{renderItem(items[index])}</div>
+    <div>{renderItem(items[index])}</div>
   );
 
   return (

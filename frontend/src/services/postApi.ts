@@ -1,9 +1,14 @@
-import { TPost } from "@types";
 import axiosInstance from "../api/axios";
-// import axios from "axios";
-
-export const fetchPostsByUserId = async (userId: string) => {
-  return (await axiosInstance.get<TPost[]>(`/posts/${userId}`)).data;
+import { PaginatedPosts } from "@hooks/apis/post/useUserPosts";
+export const fetchPostsByUserId = async (
+  { pageParam = 1, limit = 10 }: { pageParam: number; limit: number },
+  userId: string
+): Promise<PaginatedPosts> => {
+  return (
+    await axiosInstance.get<PaginatedPosts>(
+      `/users/${userId}/posts?page=${pageParam}&limit=${limit}`
+    )
+  ).data;
 };
 
 export const addPost = async (data: FormData) => {

@@ -1,7 +1,5 @@
 import AddPost from "@components/Posts/AddPost/AddPost";
 import PostContainer from "@components/Posts/PostsContainer/PostContainer";
-import { useUserPosts } from "@hooks/apis/useUserPosts";
-
 const Home = () => {
   // const posts = useMemo(
   //   () => [
@@ -71,16 +69,12 @@ const Home = () => {
   //   ],
   //   []
   // );
-  const userId = "66e300c7b792400505dbb647";
-  const { data: posts } = useUserPosts(userId);
-  console.log(posts);
+  // const userId = "66e300c7b792400505dbb647";
 
   return (
     <>
       <AddPost />
-      <PostContainer posts={posts ?? []} />
-
-      {/* <FaEllipsisV /> */}
+      <PostContainer />
     </>
   );
 };

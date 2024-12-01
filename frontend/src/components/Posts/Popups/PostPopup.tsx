@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Divider from "../components/Divider/Divider";
-import useRemovePost from "@hooks/apis/useRemovePost";
+import useRemovePost from "@hooks/apis/post/useRemovePost";
 
 const Wrapper = styled.ul`
   list-style: none;

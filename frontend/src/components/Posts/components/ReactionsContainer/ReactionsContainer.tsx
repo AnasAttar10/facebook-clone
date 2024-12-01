@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { boxShadow4Sides } from "@utils/colors";
 import Reaction from "../Reaction/Reaction";
-import useAddNewReaction from "@hooks/apis/useAddNewReaction";
-import { TReactionType } from "@types";
+import useAddNewReaction from "@hooks/apis/reaction/useAddNewReaction";
+import { TReaction, TReactionType } from "@types";
+import useUpateReaction from "@hooks/apis/reaction/useUpateReaction";
+import { useEffect } from "react";
 
 const Wrapper = styled.div`
   width: 80%;
@@ -14,11 +16,35 @@ const Wrapper = styled.div`
   border: 2px solid black;
   box-shadow: ${boxShadow4Sides};
 `;
-type TReactionContainer = { userId: string; postId: string };
-const ReactionsContainer = ({ userId, postId }: TReactionContainer) => {
-  const { mutate } = useAddNewReaction(userId, postId);
-  const handleOnClick = (type: string) => {
-    mutate({ userId, postId, reactionType: type as TReactionType });
+type TReactionContainer = {
+  userId: string;
+  postId: string;
+  hasReaction: TReaction | undefined;
+  refetchReactions: () => void;
+};
+const ReactionsContainer = ({
+  userId,
+  postId,
+  hasReaction,
+  refetchReactions,
+}: TReactionContainer) => {
+  const { mutate: addReaction, isSuccess: isAddSuccess } =
+    useAddNewReaction(postId);
+  const { mutate: updateReaction, isSuccess: isUpdateSuccess } =
+    useUpateReaction(postId);
+
+  useEffect(() => {
+    if (isAddSuccess || isUpdateSuccess) refetchReactions();
+  }, [isAddSuccess, isUpdateSuccess, refetchReactions]);
+  const handleOnClick = async (type: string) => {
+    if (hasReaction?._id) {
+      updateReaction({
+        reactionId: hasReaction?._id,
+        reactionType: type,
+      });
+    } else {
+      addReaction({ userId, postId, reactionType: type as TReactionType });
+    }
   };
   return (
     <Wrapper>

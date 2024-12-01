@@ -1,12 +1,8 @@
-import { User } from "../models/userModel";
+import { IUser, User } from "../models/userModel";
 const getUsers = async () => {
   return await User.find();
 };
-const insertUser = async () => {
-  return await User.create({
-    name: "test",
-    email: "test@gmail.com",
-    password: "1234",
-  });
+const insertUser = async (newUser: IUser) => {
+  return await User.create(newUser);
 };
 export default { getUsers, insertUser };

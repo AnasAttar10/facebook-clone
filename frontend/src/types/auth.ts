@@ -1,12 +1,13 @@
 import { TPost } from "./post";
 
 export type TUser = {
-  id: string;
+  id?: string;
   firstName: string;
   lastName: string;
   email: string;
   password: string;
-  birthDay?: string;
+  birthDay?: Date;
+  gender: string;
   from?: string;
   currentCity?: string;
   status?: "single" | "married";

@@ -1,7 +1,7 @@
 import FlexWrapper from "@components/Common/FlexWrapper/FlexWrapper";
 import Icon, { TIcons } from "@components/Common/Icon/Icon";
 import PersonalImg from "@components/Posts/components/PersonalImg/PersonalImg";
-import { useAddNewPost } from "@hooks/apis/useAddNewPost";
+import { useAddNewPost } from "@hooks/apis/post/useAddNewPost";
 import { hoverColor } from "@utils/colors";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -64,7 +64,7 @@ const AddPostForm = () => {
     handlechooseImages,
     removeImage,
   } = useUploadImages();
-  // } = useUploadImages({ videoRef, canvasRef });
+
   const { mutate, isLoading } = useAddNewPost("66e300c7b792400505dbb647");
   const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
